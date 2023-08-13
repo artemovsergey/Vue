@@ -1,28 +1,83 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Изучаем Vue 3</title>
-<meta charset="utf-8" />
+    <title>Изучаем Vue 3</title>
+    <meta charset="utf-8" />
 </head>
+
 <body>
-<div id="app">
-    <input type="text" v-on:input="setMessage" />
-    <p>{{message}}</p>
-</div>
-<script src="https://unpkg.com/vue@next"></script>
-<script>
-Vue.createApp({
-  data() {
-    return {
-      message: 'Hello Vue 3!'
-    }
-  },
-  methods: {
-    setMessage(event) {
-      this.message = event.target.value;
-    }
-  }
-}).mount('#app');
-</script>
+    <div id="app">
+
+        <input type="text" v-model="fullmessage" />
+        <p>{{message}}</p>
+        <p> Вычисляемое свойство: {{fullmessage}}</p>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+        
+        // создание объекта Vue
+        const vueApp = Vue.createApp({
+
+          // данные приложения в виде свойства
+          data() {
+            return {
+              message: 'Hello Vue 3!'  // к свойству message можем обращаться через интерполяцию {{}}
+            }
+          },
+
+          // методы объекта
+          methods: {
+
+            setMessage(event) {
+              this.message = event.target.value;
+            },
+
+            printHi(event,str){
+              console.log(this.message + str);
+              console.log(event);
+              this.message + " " + str;
+              return this.message;
+            }
+          },
+
+
+          // метод с таким названиием срабатывает автоматически при привязки
+          mounted() {
+
+            // получение данных
+            console.log(this.message);    // 
+            // изменение данных
+            this.message += " !!!";
+            console.log(this.message);    // 
+
+            },
+
+          // вычисляемые свойства
+          computed:{
+
+              fullmessage: {
+                  get: function () {
+                      return this.message + ' ' + this.message;
+                  },
+
+                  set: function (newValue) {
+                      const words = newValue.split(' ');
+                      this.message = words[0];
+                      console.log(this.message);
+                  }
+              }
+
+          }
+
+        });
+        
+        vueApp.mount('#app'); // прикрепление созданного приложения Vue к опредленному элементу html на веб-странице
+      
+    </script>
+
 </body>
 </html>
